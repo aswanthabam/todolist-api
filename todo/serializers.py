@@ -5,7 +5,7 @@ from .models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['first_name','second_name','email','username','password']
+        fields = ['first_name','last_name','email','username','password']
 
 class ObtainTokenSerializer(serializers.Serializer):
     username = serializers.CharField()
