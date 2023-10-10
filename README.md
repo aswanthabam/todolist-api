@@ -16,8 +16,8 @@
 
 ```json
 {
-  'username':'myuser',
-  'password':'mypassword'
+  "username":"myuser",
+  "password":"mypassword"
 }
 ```
 
@@ -27,7 +27,7 @@
 
 ```json
 {
-   'token':'agjisna5twywyu....'
+   "token":"agjisna5twywyu...."
 }
 ```
  
@@ -35,7 +35,7 @@
  
 ```json
 {
-  'message':'Invalid credentials!'
+  "message":"Invalid credentials!"
 }
 ```
  
