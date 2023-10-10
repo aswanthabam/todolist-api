@@ -1,0 +1,6 @@
+pyjwt
+Django==4.1.3
+psycopg2-binary
+djangorestframework
+tzdata
+python-dotenv
