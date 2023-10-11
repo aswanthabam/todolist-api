@@ -98,9 +98,6 @@ DATABASES = {
 
 # REST FRAMEWORK
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'todo.authentication.JWTAuthentication',
     ]
@@ -135,9 +132,9 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Replace 'myapp' with your app name
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),  # Replace 'myapp' with your app name
+# ]
 
 STATIC_ROOT=os.path.join(BASE_DIR, "staticfiles","static")
 
@@ -150,10 +147,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-COMPRESS_ROOT = BASE_DIR / 'static'
-  
-COMPRESS_ENABLED = False # Change in production
   
 #STATICFILES_FINDERS = ('compressor.finders.CompressorFinder','django.contrib.staticfiles.finders.AppDirectoriesFinder') # Removw in production
 
