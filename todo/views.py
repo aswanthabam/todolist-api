@@ -8,6 +8,9 @@ from django.db.models import Q
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+
+
+
 class TaskDeletion(views.APIView):
    permission_classes = [IsAuthenticated]
    def delete(self,request):
@@ -27,6 +30,9 @@ class TaskDeletion(views.APIView):
       except Exception as e:
         print(e)
         return Response({"status":"internal-error","message":"An unexpected error occured"})
+
+
+
 class TaskEditView(views.APIView):
    permission_classes = [IsAuthenticated]
 
@@ -39,15 +45,18 @@ class TaskEditView(views.APIView):
         task = Task.objects.filter(task_id=tid,user=user).first()
         if task == None:
            return Response({"status":"error","data":{"task_id":"Invalid task id provided"}})
-        serializer = TaskAddSerializer(data=request.data,context={"user":user}) 
+        serializer = TaskEditSerializer(data=request.data,context={"user":user}) 
         if serializer.is_valid():
           serializer.update(task,serializer.validated_data)
-          return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK) 
+          return Response({"status": "success", "data": {"task_id":task.task_id,"changed":serializer.data}}, status=status.HTTP_200_OK) 
         else:  
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST) 
       except Exception as e:
         print(e)
         return Response({"status":"internal-error","message":"An unexpected error occured"})  
+
+
+
 class TaskMarkCompleted(views.APIView):
    permission_classes = [IsAuthenticated]
 
@@ -69,6 +78,9 @@ class TaskMarkCompleted(views.APIView):
       except Exception as e:
         print(e)
         return Response({"status":"internal-error","message":"An unexpected error occured"})  
+
+
+
 class TaskGetView(views.APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):
@@ -86,10 +98,12 @@ class TaskGetView(views.APIView):
           else:
              tasks = Task.objects.filter(user=user)
           serializer = TaskSerializer(tasks, many=True)
-          return Response({"status":"success","data":serializer.data},status=status.HTTP_200_OK)
+          return Response({"status":"success","data":{"count":len(serializer.data),"tasks":serializer.data}},status=status.HTTP_200_OK)
       except Exception as e:
          print(e)
          return Response({"status":"internal-error","message":"An unexpected error occured"})  
+
+
 class TaskAddView(views.APIView):
     permission_classes = [IsAuthenticated]
     def post(self,request):
@@ -104,6 +118,7 @@ class TaskAddView(views.APIView):
          print(e)
          return Response({"status":"internal-error","message":"An unexpected error occured"})
 
+
 class UserRegistrationView(views.APIView):
     def post(self, request):
       try:
@@ -116,8 +131,7 @@ class UserRegistrationView(views.APIView):
       except:
           return Response({"status":"internal-error","message":"An unexpected error occured"})
         
- 
- 
+  
 # AUTHORIZATION: Bearer <TOKEN>
 class ObtainTokenView(views.APIView):
     permission_classes = [permissions.AllowAny]
@@ -131,11 +145,14 @@ class ObtainTokenView(views.APIView):
         password = serializer.validated_data.get('password')
 
         user = User.objects.filter(username=username).first()
-        # print(user.check_password(password),password,user.password)
         if user is None or not user.password== password:
-            return Response({'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Generate the JWT token
+            return Response({"status":"error",'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+        
         jwt_token = JWTAuthentication.create_jwt(user)
 
-        return Response({'token': jwt_token})
+        return Response({
+           "status":"success",
+           'data':{
+            'token': jwt_token
+           }
+         })

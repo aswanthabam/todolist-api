@@ -18,12 +18,32 @@ class TaskMarkCompletedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ['task_id','completed']
+
+"""
+Edit Task Serializer
+"""
+class TaskEditSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(required=False)
+    date_of_completion = serializers.DateTimeField(required=False)
+    task_id = serializers.IntegerField(read_only=True)
+
+    def update(self,instance,validated_data):
+        instance.title = validated_data.get("title",instance.title)
+        instance.date_of_completion = validated_data.get("date_of_completion",instance.date_of_completion)
+        instance.save()
+        return instance
+    class Meta:
+        model = Task
+        fields = ['task_id','title','date_of_completion']
+
+
 """
 Add Task Serializer
 """
 class TaskAddSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True)
     date_of_completion = serializers.DateTimeField(required=False)
+    task_id = serializers.IntegerField(read_only=True)
 
     def create(self,validated_data):
         title = validated_data.get("title")
@@ -41,7 +61,7 @@ class TaskAddSerializer(serializers.ModelSerializer):
         return instance
     class Meta:
         model = Task
-        fields = ['title','date_of_completion']
+        fields = ['task_id','title','date_of_completion']
 
 """
 Task Serializer
