@@ -49,8 +49,8 @@ An Error response have the following structure
 {
   "status":"error",
   "data":{
-    "field_one":"This field is required",
-    "field_two":"This field want to be a date"
+    "field_one":["This field is required"],
+    "field_two":["This field want to be a date"]
   }
 }
 
@@ -59,3 +59,5 @@ An Error response have the following structure
 ## Authorization
 
 For authorization we use JWT Bearer token. This token is embedded in the Header of the request
+
+[For Detailed Documentaion Click Here](https://documenter.getpostman.com/view/24114083/2s9YR3baZc)
